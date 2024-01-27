@@ -45,7 +45,7 @@ export const Layout: FC<FlexProps> = ({ children, ...rest }) => {
       {...rest}
     >
       <Navbar isShrunk={isShrunk} />
-      <Box height={{ base: "13vh", md: "13vh" }} maxH="260px" />
+      <Box height="13vh" maxH="260px" />
       <Box flex={1}>{children}</Box>
       <Box display="flex" justifyContent="flex-end" mr={8}>
         <Feedback />
