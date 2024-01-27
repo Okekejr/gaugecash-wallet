@@ -1,5 +1,5 @@
 import {
-  Box,
+  ButtonProps,
   CircularProgress,
   Image,
   Stack,
@@ -11,10 +11,10 @@ import { handleButtonColor, handleButtonImage } from "@/util/handle-wallet";
 import { useConnect } from "wagmi";
 import { SelectDrawer } from "../core/drawer";
 import { useWalletSelector } from "@/hooks/useSelector";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import type { Connector } from "wagmi";
 
-export const WalletSelector = () => {
+export const WalletSelector: FC<ButtonProps> = ({ ...rest }) => {
   const { connect, connectors, error, status, isPending, isError } =
     useConnect();
   const toast = useToast();
@@ -27,27 +27,26 @@ export const WalletSelector = () => {
     setSelectedConnector(connector.uid);
   };
 
-  // useEffect(() => {
-  //   isError === true &&
-  //     toast({
-  //       title: `${error?.name}`,
-  //       status: "error",
-  //       duration: 9000,
-  //       isClosable: true,
-  //       variant: "solid",
-  //       position: "bottom-left",
-  //     });
-  // }, [isError, error?.name, toast]);
+  useEffect(() => {
+    isError === true &&
+      toast({
+        title: `${error?.name}`,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        variant: "solid",
+        position: "bottom-left",
+      });
+  }, [isError, error?.name, toast]);
 
   return (
     <>
-      <Box width="fit-content">
-        <ConnectButton
-          title="Connect"
-          width="fit-content"
-          onClick={handleOpen}
-        />
-      </Box>
+      <ConnectButton
+        title="Connect"
+        width="fit-content"
+        onClick={handleOpen}
+        {...rest}
+      />
 
       <SelectDrawer isOpen={modal} onClose={handleClose}>
         <Stack spacing={2}>

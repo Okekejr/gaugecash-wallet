@@ -23,9 +23,6 @@ export const LivePrices: FC = () => {
       gap={4}
       p={2}
     >
-      <Text fontSize="md" fontWeight="bold">
-        Live Price Feeds
-      </Text>
       {hasMounted ? (
         <Flex gap={12}>
           <Feed name="GAUI" icon={<GauW />} func={GauFeed} />

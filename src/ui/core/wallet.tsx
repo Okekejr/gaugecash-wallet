@@ -6,20 +6,74 @@ import {
   HStack,
   Input,
   Text,
+  useToast,
 } from "@chakra-ui/react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { ConnectButton } from "./buttons";
 import { StackItemContainer } from "../components/pageContainer";
+import { ArrowDown } from "./arrow-down";
+import { WalletSelector } from "../components/wallet-selector";
+import { useMounted } from "@/hooks/useMounted";
+import { ModalPopup } from "./modal-popup";
 import { useAcctBalance } from "@/hooks/useAcc";
+import { useBuyToken } from "@/hooks/useBuyToken";
+import type { BaseError } from "wagmi";
 
 export const Wallet: FC = () => {
-  const { balance, GAUI, formatedBalance, gauiBalance } = useAcctBalance();
+  const { balance, GAUI, isConnected, formatedBalance, gauiBalance } =
+    useAcctBalance();
+
+  const { hasMounted } = useMounted();
+  const toast = useToast();
+
+  const {
+    maxBtnHandler,
+    maticForm,
+    handleMaticChange,
+    finalMatic,
+    gauForm,
+    gauFormPrice,
+    setFinalMatic,
+    maticprice,
+    buyGaui,
+    hash,
+    isConfirmed,
+    pending,
+    isConfirming,
+    error,
+  } = useBuyToken();
+
+  useEffect(() => {
+    gauFormPrice();
+  }, [finalMatic]);
+
+  useEffect(() => {
+    // Calculate and update finalMatic whenever maticForm changes
+    const finalPrice =
+      maticprice && maticForm !== null ? maticprice * maticForm : 0;
+    setFinalMatic(finalPrice);
+  }, [maticForm, maticprice]);
+
+  useEffect(() => {
+    error &&
+      toast({
+        title: `Error : ${(error as BaseError).shortMessage || error.message}}`,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        variant: "solid",
+        position: "bottom-left",
+      });
+  }, [error, error?.name, toast]);
 
   return (
     <>
       <Box
         padding="8px"
         position="relative"
+        display="flex"
+        flexDirection="column"
+        justifyContent="center"
         zIndex={1}
         minWidth="350px"
         max-width="480px"
@@ -61,6 +115,7 @@ export const Wallet: FC = () => {
                         fontSize="12px"
                         fontWeight="bold"
                         mt="0.9px"
+                        onClick={maxBtnHandler}
                       >
                         Max
                       </Text>
@@ -69,23 +124,21 @@ export const Wallet: FC = () => {
 
                   <Flex w="100%" justifyContent="space-between">
                     <Input
-                      border="none"
                       appearance="none"
+                      border="none"
                       boxShadow="none"
                       bg="transparent"
+                      focusBorderColor="transparent"
                       outline="none"
                       type="number"
                       textAlign="left"
-                      placeholder="0.0"
+                      placeholder="0"
                       w={{ base: "11rem", lg: "20rem" }}
                       fontSize={{ base: "1.7rem", md: "", lg: "1.5rem" }}
                       padding="0"
-                      sx={{
-                        "::placeholder": {
-                          color: "white",
-                          fontWeight: "bold",
-                        },
-                      }}
+                      _placeholder={{ color: "grey", fontWeight: "bold" }}
+                      value={maticForm ?? ""}
+                      onChange={handleMaticChange}
                     />
 
                     <HStack spacing="5px">
@@ -103,10 +156,11 @@ export const Wallet: FC = () => {
                     fontSize="0.9rem"
                     w={{ base: "11rem", lg: "20rem" }}
                   >
-                    $
+                    $ {finalMatic ? finalMatic.toFixed(3) : ""}
                   </Text>
                 </StackItemContainer>
               </Box>
+              <ArrowDown />
               <Box
                 borderRadius="10px"
                 backgroundColor="rgba(31, 46, 100, 0.50)"
@@ -140,19 +194,17 @@ export const Wallet: FC = () => {
                       appearance="none"
                       boxShadow="none"
                       bg="transparent"
+                      focusBorderColor="transparent"
                       outline="none"
                       type="number"
                       textAlign="left"
-                      placeholder="0.0"
+                      placeholder="0"
                       w={{ base: "11rem", lg: "20rem" }}
                       fontSize={{ base: "1.7rem", md: "", lg: "1.5rem" }}
                       padding="0"
-                      sx={{
-                        "::placeholder": {
-                          color: "white",
-                          fontWeight: "bold",
-                        },
-                      }}
+                      value={gauForm ?? ""}
+                      _placeholder={{ color: "grey", fontWeight: "bold" }}
+                      readOnly
                     />
 
                     <HStack spacing="5px">
@@ -165,24 +217,70 @@ export const Wallet: FC = () => {
                       <Text fontWeight="bold">GAUI</Text>
                     </HStack>
                   </Flex>
-                  <Text
-                    color="grey"
-                    fontSize="0.9rem"
-                    w={{ base: "11rem", lg: "20rem" }}
-                  >
-                    $
-                  </Text>
+                  <Box h="21.594px" />
                 </StackItemContainer>
               </Box>
-              <ConnectButton
-                title="Connect Wallet"
-                backgroundColor="rgba(31, 46, 100, 0.50)"
-                border="1px solid #273977"
-                borderRadius="10px"
-                opacity="0.8"
-                width="100%"
-                height="5rem"
-              />
+
+              <>
+                {hasMounted ? (
+                  !isConnected ? (
+                    <WalletSelector
+                      title="Connect Wallet"
+                      backgroundColor="rgba(31, 46, 100, 0.50)"
+                      border="1px solid #273977"
+                      borderRadius="10px"
+                      opacity="0.8"
+                      width="100%"
+                      height="3.5rem"
+                      _hover={{ bgColor: "rgba(31, 46, 100, 0.50)" }}
+                    />
+                  ) : (
+                    ""
+                  )
+                ) : null}
+              </>
+
+              <>
+                {hasMounted ? (
+                  isConnected && maticForm ? (
+                    <ConnectButton
+                      border="1px solid #273977"
+                      borderRadius="10px"
+                      opacity="1"
+                      width="100%"
+                      height="3.5rem"
+                      title="Buy Crowdsale"
+                      _hover={{ bgColor: "rgba(78, 56, 156, 0.48)" }}
+                      onClick={buyGaui}
+                    />
+                  ) : (
+                    isConnected && (
+                      <WalletSelector
+                        title={pending ? "Confirming..." : "Enter Amount"}
+                        backgroundColor="rgba(31, 46, 100, 0.50)"
+                        border="1px solid #273977"
+                        borderRadius="10px"
+                        opacity="0.8"
+                        width="100%"
+                        height="3.5rem"
+                        isDisabled
+                        _hover={{ bgColor: "rgba(31, 46, 100, 0.50)" }}
+                      />
+                    )
+                  )
+                ) : null}
+              </>
+
+              {isConfirmed ? (
+                <ModalPopup
+                  hash={hash}
+                  isConfirmed={isConfirmed}
+                  isConfirming={isConfirming}
+                  isSuccess={isConfirmed}
+                />
+              ) : (
+                ""
+              )}
             </StackItemContainer>
           </FormControl>
         </form>

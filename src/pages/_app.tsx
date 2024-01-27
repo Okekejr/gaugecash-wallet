@@ -5,7 +5,7 @@ import { Layout } from "@/ui/components/layout";
 import { ChakraProvider } from "@chakra-ui/react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { AppProps } from "next/app";
-import { polygon } from "viem/chains";
+import { polygon, polygonMumbai } from "viem/chains";
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { coinbaseWallet, injected, walletConnect } from "wagmi/connectors";
 
@@ -13,7 +13,7 @@ const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "";
 const queryClient = new QueryClient();
 
 const config = createConfig({
-  chains: [polygon],
+  chains: [polygonMumbai, polygon],
   connectors: [
     injected({ target: "metaMask" }),
     walletConnect({
@@ -31,6 +31,13 @@ const config = createConfig({
       `https://polygon-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY}`,
       {
         key: process.env.NEXT_PUBLIC_ALCHEMY_KEY,
+        name: "Alchemy HTTP Provider",
+      }
+    ),
+    [polygonMumbai.id]: http(
+      `https://polygon-mumbai.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_KEY_MUMBAI}`,
+      {
+        key: process.env.NEXT_PUBLIC_ALCHEMY_KEY_MUMBAI,
         name: "Alchemy HTTP Provider",
       }
     ),

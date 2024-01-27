@@ -5,6 +5,8 @@ import {
   Box,
   Button,
   Flex,
+  HStack,
+  Heading,
   Stack,
   Stat,
   StatHelpText,
@@ -18,10 +20,10 @@ import { AccountDrawer, SwitchChainDrawer } from "../core/drawer";
 import { useAcctBalance } from "@/hooks/useAcc";
 import { MaticFeed } from "@/config/dataFeeds/maticFeed";
 import { useFetchValue } from "@/hooks/useFetchValue";
-import { UsdtFeed } from "@/config/dataFeeds/usdtFeed";
 import { useAccount, useSwitchChain } from "wagmi";
 import { polygon } from "viem/chains";
 import { ConnectButton } from "../core/buttons";
+import { IoWalletOutline } from "react-icons/io5";
 
 export const Account: FC = () => {
   const { address, balance, GAUI, formatedBalance, gauiBalance } =
@@ -29,23 +31,22 @@ export const Account: FC = () => {
   const { chainId, isConnected } = useAccount();
   const { switchChain } = useSwitchChain();
   const { handleOpen, modal, handleClose } = useWalletSelector();
-  const { value: matic } = useFetchValue(MaticFeed);
-  const { value: usdt } = useFetchValue(UsdtFeed);
+  const { value: maticprice } = useFetchValue(MaticFeed);
   const toast = useToast();
 
-  // useEffect(() => {
-  //   if (isConnected === true && chainId !== polygon.id)
-  //     toast({
-  //       title: "Wrong Network / Chain",
-  //       description:
-  //         "Click on profile button and click on switch network button ",
-  //       status: "error",
-  //       duration: 9000,
-  //       isClosable: true,
-  //       variant: "solid",
-  //       position: "bottom-left",
-  //     });
-  // }, [chainId, isConnected, toast]);
+  useEffect(() => {
+    if (isConnected === true && chainId !== polygon.id)
+      toast({
+        title: "Wrong Network / Chain",
+        description:
+          "Click on profile button and click on switch network button ",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+        variant: "solid",
+        position: "bottom-left",
+      });
+  }, [chainId, isConnected, toast]);
 
   return (
     <>
@@ -93,7 +94,18 @@ export const Account: FC = () => {
           onClose={handleClose}
           addie={address && TruncateAddress(4, address)}
         >
-          <Stack spacing={12}>
+          <Stack spacing={12} mt={8}>
+            <HStack>
+              <Heading fontSize="23px">Your Portfolio</Heading>
+              <IoWalletOutline size="1.2rem" />
+            </HStack>
+            <Flex w="fit-content">
+              <Stat>
+                <StatLabel>Current GAUI balance</StatLabel>
+                <StatNumber>{GAUI ? gauiBalance(GAUI) : "0.000"}</StatNumber>
+              </Stat>
+            </Flex>
+
             <Stat w="fit-content">
               <StatNumber fontSize="30px">
                 {balance?.data && formatedBalance(balance.data)} MATIC
@@ -101,18 +113,22 @@ export const Account: FC = () => {
               <StatHelpText fontSize="16px">
                 $
                 {Number(
-                  matic && usdt !== null ? matic * usdt : "0.000"
+                  maticprice && balance?.data !== null
+                    ? maticprice * parseFloat(formatedBalance(balance.data))
+                    : 0.0
                 ).toFixed(2)}{" "}
+                {""}
                 USD
               </StatHelpText>
             </Stat>
 
-            <Flex w="fit-content">
-              <Stat>
-                <StatLabel>Current GAUI balance</StatLabel>
-                <StatNumber>{GAUI ? gauiBalance(GAUI) : "0.000"}</StatNumber>
-              </Stat>
-            </Flex>
+            <Text
+              textShadow="-7px -5px #ffffff"
+              bgGradient="linear(to-l, #7143D6, #003DE9, #501681)"
+              bgClip="text"
+            >
+              Join us in our Second Crowdsale !
+            </Text>
           </Stack>
         </AccountDrawer>
       )}
