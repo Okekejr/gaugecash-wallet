@@ -1,6 +1,6 @@
 import { MetamaskIcon } from "@/ui/components/icons/Metamask";
 import { PageContainer } from "@/ui/components/pageContainer";
-import { LivePrices } from "@/ui/core/livePrices";
+import { NoticeBubble } from "@/ui/core/notice";
 import { Wallet } from "@/ui/core/wallet";
 import { HStack, Heading } from "@chakra-ui/react";
 
@@ -12,7 +12,7 @@ const Home = () => {
         <MetamaskIcon fontSize={35} />
       </HStack>
       <Wallet />
-      <LivePrices />
+      <NoticeBubble />
     </PageContainer>
   );
 };

@@ -153,7 +153,7 @@ export const Wallet: FC = () => {
                 <StackItemContainer>
                   <Flex justifyContent="space-between">
                     <Text textAlign="end" fontSize="12px">
-                      You Pay
+                      You Recieve
                     </Text>
                     <Flex
                       alignItems="center"

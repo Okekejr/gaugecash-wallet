@@ -13,7 +13,7 @@ const projectId = process.env.NEXT_PUBLIC_PROJECT_ID || "";
 const queryClient = new QueryClient();
 
 const config = createConfig({
-  chains: [polygonMumbai, polygon],
+  chains: [polygon, polygonMumbai],
   connectors: [
     injected({ target: "metaMask" }),
     walletConnect({

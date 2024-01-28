@@ -57,6 +57,7 @@ export const WalletSelector: FC<ButtonProps> = ({ ...rest }) => {
                 borderTopLeftRadius={i === 0 ? "12px" : ""}
                 borderBottomRightRadius={i === 2 ? "12px" : ""}
                 key={connector.uid}
+                isDisabled={i === 1 || i === 2}
                 onClick={() => connecting(connector)}
               >
                 {!connector && ""}
