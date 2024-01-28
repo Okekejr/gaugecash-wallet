@@ -10,7 +10,11 @@ import {
 } from "@chakra-ui/react";
 import { FC, useEffect } from "react";
 import { ConnectButton } from "./buttons";
-import { StackItemContainer } from "../components/pageContainer";
+import {
+  StackItemContainer,
+  WalletConatiner,
+  WalletInput,
+} from "../components/pageContainer";
 import { ArrowDown } from "./arrow-down";
 import { WalletSelector } from "../components/wallet-selector";
 import { useMounted } from "@/hooks/useMounted";
@@ -70,37 +74,15 @@ export const Wallet: FC = () => {
         variant: "solid",
         position: "bottom-left",
       });
-  }, [error, error?.name, toast]);
+  }, [error, toast]);
 
   return (
     <>
-      <Box
-        padding="8px"
-        position="relative"
-        display="flex"
-        flexDirection="column"
-        justifyContent="center"
-        zIndex={1}
-        minWidth="350px"
-        max-width="480px"
-        border="1px solid"
-        borderRadius="24px"
-        w={{ md: "32rem" }}
-      >
+      <WalletConatiner>
         <form>
           <FormControl>
             <StackItemContainer>
-              <Box
-                borderRadius="10px"
-                backgroundColor="rgba(31, 46, 100, 0.50)"
-                border="1px solid #273977"
-                display="flex"
-                flexDir="column"
-                fontSize="1rem"
-                opacity="0.8"
-                padding={4}
-                _hover={{ opacity: "1" }}
-              >
+              <WalletInput>
                 <StackItemContainer>
                   <Flex justifyContent="space-between">
                     <Text textAlign="end" fontSize="12px">
@@ -165,19 +147,9 @@ export const Wallet: FC = () => {
                     $ {finalMatic ? finalMatic.toFixed(3) : ""}
                   </Text>
                 </StackItemContainer>
-              </Box>
+              </WalletInput>
               <ArrowDown />
-              <Box
-                borderRadius="10px"
-                backgroundColor="rgba(31, 46, 100, 0.50)"
-                border="1px solid #273977"
-                display="flex"
-                flexDir="column"
-                fontSize="1rem"
-                opacity="0.8"
-                padding={4}
-                _hover={{ opacity: "1" }}
-              >
+              <WalletInput>
                 <StackItemContainer>
                   <Flex justifyContent="space-between">
                     <Text textAlign="end" fontSize="12px">
@@ -217,7 +189,7 @@ export const Wallet: FC = () => {
                       <Avatar
                         src="assets/img/gaugefield_logo.png"
                         size="xs"
-                        name="Polygon_matic_logo"
+                        name="GAUI_token_logo"
                       />
 
                       <Text fontWeight="bold">GAUI</Text>
@@ -225,7 +197,7 @@ export const Wallet: FC = () => {
                   </Flex>
                   <Box h="21.594px" />
                 </StackItemContainer>
-              </Box>
+              </WalletInput>
 
               <>
                 {hasMounted ? (
@@ -299,7 +271,7 @@ export const Wallet: FC = () => {
             </StackItemContainer>
           </FormControl>
         </form>
-      </Box>
+      </WalletConatiner>
     </>
   );
 };

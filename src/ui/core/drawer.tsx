@@ -9,19 +9,14 @@ import {
   DrawerContent,
   DrawerFooter,
   DrawerHeader,
-  DrawerProps,
   Flex,
   Text,
 } from "@chakra-ui/react";
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import { GiPowerButton } from "react-icons/gi";
 import { SlideInText } from "../components/slide-in-text";
 import { useDisconnect } from "wagmi";
-
-interface ModalSelect extends DrawerProps {
-  children: ReactNode;
-  addie?: string;
-}
+import { ModalSelect } from "@/types/drawer";
 
 export const SelectDrawer: FC<ModalSelect> = ({ children, ...rest }) => {
   return (

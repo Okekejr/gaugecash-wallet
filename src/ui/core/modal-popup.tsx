@@ -8,15 +8,9 @@ import {
   ModalOverlay,
 } from "@chakra-ui/modal";
 import { FC, useEffect, useState } from "react";
+import { ModalT } from "@/types/modal";
 
-interface Props {
-  hash: `0x${string}` | undefined;
-  isConfirming: boolean;
-  isConfirmed: boolean;
-  isSuccess: boolean;
-}
-
-export const ModalPopup: FC<Props> = ({
+export const ModalPopup: FC<ModalT> = ({
   hash,
   isConfirmed,
   isConfirming,

@@ -1,11 +1,7 @@
 import { FC } from "react";
 import { motion } from "framer-motion";
-import { Button, ButtonProps } from "@chakra-ui/react";
-import { MyBtn, Selector } from "@/types/button";
-
-interface Props extends ButtonProps {
-  title: string;
-}
+import { Button } from "@chakra-ui/react";
+import { ConnectBtn, MyBtn, Selector } from "@/types/button";
 
 export const CustomBtn: FC<MyBtn> = ({ children }) => {
   return (
@@ -15,7 +11,7 @@ export const CustomBtn: FC<MyBtn> = ({ children }) => {
   );
 };
 
-export const ConnectButton: FC<Props> = ({ title, ...rest }) => {
+export const ConnectButton: FC<ConnectBtn> = ({ title, ...rest }) => {
   return (
     <>
       <CustomBtn>

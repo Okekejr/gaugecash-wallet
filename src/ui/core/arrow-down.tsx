@@ -23,5 +23,3 @@ export const ArrowDown: FC<BoxProps> = ({ ...rest }) => {
     </>
   );
 };
-
-// #273977

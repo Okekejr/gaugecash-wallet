@@ -9,3 +9,7 @@ export interface Selector extends ButtonProps {
   bgGradient: string;
   children: ReactNode;
 }
+
+export interface ConnectBtn extends ButtonProps {
+  title: string;
+}
