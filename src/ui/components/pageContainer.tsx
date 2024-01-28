@@ -23,7 +23,7 @@ export const PageContainer: React.FC<Props> = ({ children, ...rest }) => {
       zIndex={10}
       {...rest}
     >
-      <VStack spacing={6}>{children}</VStack>
+      <VStack spacing={8}>{children}</VStack>
     </Container>
   );
 };

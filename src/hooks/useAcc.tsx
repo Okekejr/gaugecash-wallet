@@ -27,6 +27,13 @@ export const useAcctBalance = () => {
       : "0.0000";
   };
 
+  const maticBalanceNumber = (data: bigint | undefined): number => {
+    const number =
+    typeof data === "bigint" ? parseFloat(formatEther(data)) : 0;
+
+  return number;
+  };
+
   return {
     address,
     balance,
@@ -34,5 +41,6 @@ export const useAcctBalance = () => {
     isConnected,
     formatedBalance,
     gauiBalance,
+    maticBalanceNumber,
   };
 };

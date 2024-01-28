@@ -20,8 +20,14 @@ import { useBuyToken } from "@/hooks/useBuyToken";
 import type { BaseError } from "wagmi";
 
 export const Wallet: FC = () => {
-  const { balance, GAUI, isConnected, formatedBalance, gauiBalance } =
-    useAcctBalance();
+  const {
+    balance,
+    GAUI,
+    isConnected,
+    formatedBalance,
+    gauiBalance,
+    maticBalanceNumber,
+  } = useAcctBalance();
 
   const { hasMounted } = useMounted();
   const toast = useToast();
@@ -249,7 +255,16 @@ export const Wallet: FC = () => {
                       opacity="1"
                       width="100%"
                       height="3.5rem"
-                      title="Buy Crowdsale"
+                      isDisabled={
+                        maticForm !== null &&
+                        maticForm >= maticBalanceNumber(balance.data?.value)
+                      }
+                      title={
+                        maticForm !== null &&
+                        maticForm <= maticBalanceNumber(balance.data?.value)
+                          ? "Buy Crowdsale"
+                          : "Insufficient MATIC balance"
+                      }
                       _hover={{ bgColor: "rgba(78, 56, 156, 0.48)" }}
                       onClick={buyGaui}
                     />

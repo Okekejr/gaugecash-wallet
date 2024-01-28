@@ -32,6 +32,7 @@ export const LivePrices: FC = () => {
       ) : (
         "loading..."
       )}
+      <Text>Live Price Feeds</Text>
     </Flex>
   );
 };
