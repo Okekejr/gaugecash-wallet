@@ -4,7 +4,7 @@ import { useAccount, useBalance, useReadContract } from "wagmi";
 import type { UseBalanceReturnType } from "wagmi";
 
 export const useAcctBalance = () => {
-  const { address, isConnected } = useAccount();
+  const { address, isConnected, chainId } = useAccount();
 
   const { data: GAUI } = useReadContract({
     address: GAUI_TOKEN_ADDRESS,
@@ -28,10 +28,9 @@ export const useAcctBalance = () => {
   };
 
   const maticBalanceNumber = (data: bigint | undefined): number => {
-    const number =
-    typeof data === "bigint" ? parseFloat(formatEther(data)) : 0;
+    const number = typeof data === "bigint" ? parseFloat(formatEther(data)) : 0;
 
-  return number;
+    return number;
   };
 
   return {
@@ -39,6 +38,7 @@ export const useAcctBalance = () => {
     balance,
     GAUI,
     isConnected,
+    chainId,
     formatedBalance,
     gauiBalance,
     maticBalanceNumber,

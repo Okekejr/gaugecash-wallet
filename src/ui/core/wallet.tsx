@@ -21,7 +21,8 @@ import { useMounted } from "@/hooks/useMounted";
 import { ModalPopup } from "./modal-popup";
 import { useAcctBalance } from "@/hooks/useAcc";
 import { useBuyToken } from "@/hooks/useBuyToken";
-import type { BaseError } from "wagmi";
+import { useSwitchChain, type BaseError } from "wagmi";
+import { polygon } from "viem/chains";
 
 export const Wallet: FC = () => {
   const {
@@ -31,10 +32,12 @@ export const Wallet: FC = () => {
     formatedBalance,
     gauiBalance,
     maticBalanceNumber,
+    chainId,
   } = useAcctBalance();
 
   const { hasMounted } = useMounted();
   const toast = useToast();
+  const { switchChain } = useSwitchChain();
 
   const {
     maxBtnHandler,
@@ -232,13 +235,21 @@ export const Wallet: FC = () => {
                         maticForm >= maticBalanceNumber(balance.data?.value)
                       }
                       title={
-                        maticForm !== null &&
-                        maticForm <= maticBalanceNumber(balance.data?.value)
+                        maticForm !== null && chainId != polygon.id
+                          ? "Change Network"
+                          : maticForm !== null &&
+                            maticForm <= maticBalanceNumber(balance.data?.value)
                           ? "Buy Crowdsale"
                           : "Insufficient MATIC balance"
                       }
                       _hover={{ bgColor: "rgba(78, 56, 156, 0.48)" }}
-                      onClick={buyGaui}
+                      onClick={(e) => {
+                        if (chainId !== polygon.id) {
+                          switchChain({ chainId: polygon.id });
+                        } else {
+                          buyGaui(e);
+                        }
+                      }}
                     />
                   ) : (
                     isConnected && (
