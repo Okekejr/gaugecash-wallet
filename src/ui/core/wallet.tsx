@@ -22,7 +22,7 @@ import { ModalPopup } from "./modal-popup";
 import { useAcctBalance } from "@/hooks/useAcc";
 import { useBuyToken } from "@/hooks/useBuyToken";
 import { useSwitchChain, type BaseError } from "wagmi";
-import { polygon } from "viem/chains";
+import { polygonMumbai } from "viem/chains";
 
 export const Wallet: FC = () => {
   const {
@@ -235,17 +235,15 @@ export const Wallet: FC = () => {
                         maticForm >= maticBalanceNumber(balance.data?.value)
                       }
                       title={
-                        maticForm !== null && chainId != polygon.id
-                          ? "Change Network"
-                          : maticForm !== null &&
-                            maticForm <= maticBalanceNumber(balance.data?.value)
+                        maticForm !== null &&
+                        maticForm <= maticBalanceNumber(balance.data?.value)
                           ? "Buy Crowdsale"
                           : "Insufficient MATIC balance"
                       }
                       _hover={{ bgColor: "rgba(78, 56, 156, 0.48)" }}
                       onClick={(e) => {
-                        if (chainId !== polygon.id) {
-                          switchChain({ chainId: polygon.id });
+                        if (chainId !== polygonMumbai.id) {
+                          switchChain({ chainId: polygonMumbai.id });
                         } else {
                           buyGaui(e);
                         }
